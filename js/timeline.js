@@ -18,7 +18,7 @@ var Timeline = (function(Branch){
     this.svg_div.setAttribute('height', this.height())
 
 
-    Timeline.prototype.drawTimeline()
+    this.drawTimeline()
     return this
   }
 
@@ -29,8 +29,8 @@ var Timeline = (function(Branch){
     var _hereWeAre = 0
     cloneBranch = _.clone(this.branches)
     // TO continue to create the Timeline 
-    _.forEach(this.theMasterBranch.dates, function(date){
-      _this.theMasterBranch.drawDate(date, key1)
+    _.forEach(this.theMasterBranch.dates, function(date, key){
+      _this.theMasterBranch.drawDate(date, key)
     })
   }
 
