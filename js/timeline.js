@@ -29,8 +29,10 @@ var Timeline = (function(Branch){
     var _hereWeAre = 0
     cloneBranch = _.clone(this.branches)
     // TO continue to create the Timeline 
-    _.forEach(this.theMasterBranch.dates, function(date, key){
-      _this.theMasterBranch.drawDate(date, key)
+    _.forEach(this.branches, function(branch, k){
+      _.forEach(branch.dates, function(date, key){
+        branch.drawDate(date, key)
+      })
     })
   }
 
