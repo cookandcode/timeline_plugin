@@ -7,6 +7,7 @@ var Branch = (function(SVG){
     this.name = params.branch_name
     this.img = params.branch_img
     this.dates = params.dates
+    this.spaceBetweenBranch = 400
 
     if (this.isMaster){
       this.beginning_position = {
@@ -31,7 +32,7 @@ var Branch = (function(SVG){
     top += parseInt(_diff_month) * this.month_gap - 200
     this.beginning_position = {
       top: top,
-      left: left - 400
+      left: left - this.spaceBetweenBranch
     }
   }
 
@@ -74,6 +75,15 @@ var Branch = (function(SVG){
     line_x2 = date.position.left + this.squareWidth/2
     line_y2 = date.position.top
     console.log(line_x2, 'test', this)
+    
+    // Create the transition line
+    if (index == 0 && this.ref_date){
+      tx1 = this.beginning_position.left + this.spaceBetweenBranch + this.squareWidth / 2
+      ty1 = this.beginning_position.top + this.squareWidth + 50
+      tx2 = this.beginning_position.left + this.squareWidth / 2
+      ty2 = this.beginning_position.top + this.squareWidth + 50
+      this.svg_div.appendChild(SVG.createLine({attributes: {x1: tx1, y1: ty1, x2: tx2, y2: ty2, stroke: "red"}}))
+    }
     
     // Draw Line From previous date to the next date
     this.svg_div.appendChild(SVG.createLine({attributes: {x1: line_x1, y1: line_y1, x2: line_x2, y2: line_y2, stroke: "red"}}))
