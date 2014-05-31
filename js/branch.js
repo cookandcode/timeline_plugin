@@ -8,6 +8,7 @@ var Branch = (function(SVG){
     this.img = params.branch_img
     this.dates = params.dates
     this.spaceBetweenBranch = 400
+    this.branchSide = params.side
 
     if (this.isMaster){
       this.beginning_position = {
@@ -27,12 +28,19 @@ var Branch = (function(SVG){
     return this
   }
 
+  // Calculate the position of the square with the image of children branch
   Branch.prototype.calculateBeginningPosition = function(top, left){
     _diff_month = Date.parse(this.dates[0].date) - Date.parse(this.ref_date) //Difference in millisecond
     top += parseInt(_diff_month) * this.month_gap - 200
+    //the branch is at the left or at the right of the master branch
+    if (this.branchSide == "left"){
+      left = left - this.spaceBetweenBranch
+    }else{
+      left = left + this.spaceBetweenBranch
+    }
     this.beginning_position = {
       top: top,
-      left: left - this.spaceBetweenBranch
+      left: left
     }
   }
 
@@ -78,10 +86,17 @@ var Branch = (function(SVG){
     
     // Create the transition line
     if (index == 0 && this.ref_date){
-      tx1 = this.beginning_position.left + this.spaceBetweenBranch + this.squareWidth / 2
-      ty1 = this.beginning_position.top + this.squareWidth + 50
-      tx2 = this.beginning_position.left + this.squareWidth / 2
-      ty2 = this.beginning_position.top + this.squareWidth + 50
+      if (this.branchSide == "left"){
+        tx1 = this.beginning_position.left + this.spaceBetweenBranch + this.squareWidth / 2
+        ty1 = this.beginning_position.top + this.squareWidth + 50
+        tx2 = this.beginning_position.left + this.squareWidth / 2
+        ty2 = this.beginning_position.top + this.squareWidth + 50
+      }else{
+        tx1 = this.beginning_position.left - this.spaceBetweenBranch + this.squareWidth / 2
+        ty1 = this.beginning_position.top + this.squareWidth + 50
+        tx2 = this.beginning_position.left + this.squareWidth / 2
+        ty2 = this.beginning_position.top + this.squareWidth + 50
+      }
       this.svg_div.appendChild(SVG.createLine({attributes: {x1: tx1, y1: ty1, x2: tx2, y2: ty2, stroke: "red"}}))
     }
     

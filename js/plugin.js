@@ -17,12 +17,22 @@
     branch_name: "Work",
     branch_from: "Ecole",
     branch_img: "url/to/img",
+    side: 'right',
     dates: [{
       date: "2013-07-01", 
       content: "1ere année au Boulot"
     }]
-  }
-  ]
+  },{
+    branch_name: "Le Male Saint",
+    branch_from: "Ecole",
+    side: 'left',
+    branch_img: "url/to/img",
+    dates: [{
+      date: "2013-01-01", 
+      content: "Lancement du Blog"
+    }]
+  }]
+  
   var div = document.querySelectorAll("[create-timeline]")[0]
   if (!div){
     alert('no div')

@@ -15,7 +15,7 @@ var Timeline = (function(Branch){
 
       _branch.draw_begining()
     })
-    this.svg_div.setAttribute('height', this.height())
+    this.svg_div.setAttribute('height', this.getHeight())
 
 
     this.drawTimeline()
@@ -27,7 +27,7 @@ var Timeline = (function(Branch){
     console.log(this)
     var _this = this
     var _hereWeAre = 0
-    cloneBranch = _.clone(this.branches)
+    //cloneBranch = _.clone(this.branches)
     // TO continue to create the Timeline 
     _.forEach(this.branches, function(branch, k){
       _.forEach(branch.dates, function(date, key){
@@ -36,7 +36,8 @@ var Timeline = (function(Branch){
     })
   }
 
-  Timeline.prototype.height = function(){
+  // Get the height of the Timeline
+  Timeline.prototype.getHeight = function(){
     _this = this
     if (!this.total_height){
       this.total_height = 0
