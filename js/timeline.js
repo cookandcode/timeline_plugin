@@ -13,12 +13,11 @@ var Timeline = (function(Branch){
       _this.branches.push(_branch)
       if (_branch.isMaster) _this.theMasterBranch = _branch
 
-      _branch.draw_begining()
     })
-    this.svg_div.setAttribute('height', this.getHeight())
-
 
     this.drawTimeline()
+    this.svg_div.setAttribute('height', this.getHeight())
+
     return this
   }
 
@@ -30,23 +29,18 @@ var Timeline = (function(Branch){
     //cloneBranch = _.clone(this.branches)
     // TO continue to create the Timeline 
     _.forEach(this.branches, function(branch, k){
-      _.forEach(branch.dates, function(date, key){
-        branch.drawDate(date, key)
-      })
+      branch.drawIt()
     })
   }
 
   // Get the height of the Timeline
   Timeline.prototype.getHeight = function(){
-    _this = this
-    if (!this.total_height){
-      this.total_height = 0
-      _.forEach(this.branches, function(branch){
-        last_date = _.last(branch.dates)
-        if (last_date.position.top > _this.total_height) _this.total_height = last_date.position.top
-      })
-    }
-    return this.total_height+"px"
+    var totalHeight = 0
+    _.forEach(this.branches, function(branch){
+      console.log(branch)
+      if (branch.totalHeight > totalHeight) totalHeight = branch.totalHeight
+    })
+    return totalHeight+"px"
   }
 
   return Timeline
