@@ -1,36 +1,54 @@
 (function(SVG, Timeline) {
-  var data = [{
-    branch_name: "Ecole",
-    banch_img: "url/to/img",
-    master: true,
+  var branches = [{
+    name: "Ecole",
+    img: "url/to/img",
     dates: [{
-      date: "2012-09-01", 
+      date: "2009-09-01", 
       content: "1ere année à Supinfo"
     },{
-      date: "2013-09-01",
+      date: "2010-09-01",
       content: "2eme année à Supinfo"
     },{
-      date: "2014-09-01",
+      date: "2011-09-01",
       content: "3eme année à Supinfo"
-    }]
-  },{
-    branch_name: "Work",
-    branch_from: "Ecole",
-    branch_img: "url/to/img",
-    side: 'right',
-    dates: [{
-      date: "2013-07-01", 
-      content: "1ere année au Boulot"
-    }]
-  },{
-    branch_name: "Le Male Saint",
-    branch_from: "Ecole",
-    side: 'left',
-    branch_img: "url/to/img",
-    dates: [{
-      date: "2013-01-01", 
-      content: "Lancement du Blog"
-    }]
+    },{
+      date: "2012-09-01",
+      content: "3ème année à EFFICOM"
+    },{
+      date: "2013-09-01",
+      content: "4eme année à EFFICOM"
+    },{
+      date: "2014-09-01",
+      content: "5eme année à EFFICOM"
+    }],
+    children: [
+      {
+        name: "Work",
+        from: "Ecole",
+        img: "url/to/img",
+        side: 'right',
+        dates: [{
+          date: "2010-07-01", 
+          content: "Stagiaire a la DSI"
+        },{
+          date: "2011-07-01",
+          content: "Stagiaire à la DSI (again)"
+        },{
+          date: "2012-07-01",
+          content: "Stagiaire à ISA (Developpeur C#)"
+        },{
+          date: "2013-10-01",
+          content: "Assistant Chef de projet chez Ma santé Facile"
+        }]
+      },{
+        name: "Le Male Saint",
+        side: 'left',
+        img: "url/to/img",
+        dates: [{
+          date: "2013-01-01", 
+          content: "Lancement du Blog"
+        }]
+      }]
   }]
   
   var div = document.querySelectorAll("[create-timeline]")[0]
@@ -42,7 +60,7 @@
     month_height = 200
     center = (svg_width - square_width)/ 2 //100 == width of carre
 
-    MyTimeline = new Timeline(data, 50, center, div)
+    MyTimeline = new Timeline(branches, 50, center, div)
     //div.appendChild(SVG.createSquare({attributes : {x:center, y:50, width: square_width, fill: "transparent", stroke: "red"}}))
   }
 
