@@ -53,3 +53,22 @@ SVG.createText = function(params){
 
   return element
 }
+
+SVG.createImage = function(params){
+  element = new SVG('image')
+  console.log(params)
+  element.setAttribute("x", 0)
+  element.setAttribute("y", 0)
+  if (params.attributes){
+    _.forEach(params.attributes, function(value, key){
+      if (key == "xlink:href"){
+        element.setAttributeNS('http://www.w3.org/1999/xlink', 'href', value)
+      }else{
+        element.setAttribute(key, value)
+      }
+    })
+  }
+
+  console.log(element)
+  return element
+}
