@@ -73,8 +73,10 @@ var Branch = (function(SVG){
 
 
   // Square with the img
-  Branch.prototype.draw_begining = function(){
-      this.svg_div.appendChild(SVG.createSquare({attributes : {x: this.beginning_position.left, y: this.beginning_position.top, width: this.squareWidth, fill: "transparent", stroke: "red"}}))
+  Branch.prototype.drawBeginning = function(){
+    //create Pattern for the img
+    this.svg_div.appendChild(SVG.createImage({attributes: {x: this.beginning_position.left, y: this.beginning_position.top, "xlink:href": 'http://lemalesaint.fr/media/W1siZiIsIjIwMTQvMDUvbWluaV9mZXVpbGxldGVzX2F1X2phbWJvbl9zZWNfdG9tYXRlX2NoZXZyZV83MTAyYi5qcGciXV0/mini-feuilletes-au-jambon-sec-tomate-chevre.jpg?sha=f379977a', height: this.squareWidth, width: this.squareWidth}}))
+    this.svg_div.appendChild(SVG.createSquare({attributes : {x: this.beginning_position.left, y: this.beginning_position.top, width: this.squareWidth, "fill-opacity": "0", stroke: "red"}}))
   }
 
   Branch.prototype.parseDate = function(){
@@ -123,7 +125,7 @@ var Branch = (function(SVG){
     // Draw the square when arrive on it
     if (index == 0){
       // Draw the square with the image
-      this.draw_begining()
+      this.drawBeginning()
       line_x1 = this.beginning_position.left + this.squareWidth/2
       line_y1 = this.beginning_position.top + this.squareWidth
     }else{
