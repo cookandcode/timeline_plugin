@@ -47,7 +47,7 @@ var Branch = (function(SVG){
 
   // Calculate the position of the square with the image of children branch
   Branch.prototype.calculateBeginningPosition = function(){
-    _diff_month = Date.parse(this.dates[0].date) - Date.parse(this.parent.dates[0].date) //Difference in millisecond
+    _diff_month = Date.parse(this.getFirstDate()) - Date.parse(this.parent.getFirstDate()) //Difference in millisecond
     var _top = this.parent.beginning_position.top + parseInt(_diff_month) * this.month_gap - 200
     var _left = this.parent.beginning_position.left
     //the branch is at the left or at the right of the master branch
@@ -62,6 +62,16 @@ var Branch = (function(SVG){
     }
   }
 
+  // Return the first date for the branch
+  Branch.prototype.getFirstDate = function(){
+    if (typeof this.dates[0].date == "string"){
+      return this.dates[0].date
+    }else{
+      return this.dates[0].date.start
+    }
+  }
+
+
   // Square with the img
   Branch.prototype.draw_begining = function(){
       this.svg_div.appendChild(SVG.createSquare({attributes : {x: this.beginning_position.left, y: this.beginning_position.top, width: this.squareWidth, fill: "transparent", stroke: "red"}}))
@@ -73,7 +83,11 @@ var Branch = (function(SVG){
     _top = parseInt(this.beginning_position.top)
     _date_before = null
     _.forEach(this.dates, function(date){
-          date.parsedDate = Date.parse(date.date)
+          if (typeof date.date == "string"){
+            date.parsedDate = Date.parse(date.date)
+          }else{
+            date.parsedDate = Date.parse(date.date.start)
+          }
           if (!_date_before)
             _top += 200
           else{
@@ -143,7 +157,12 @@ var Branch = (function(SVG){
     this.updateTotalHeight(date.position.top + this.squareWidth)
 
     // Draw Text for the new date
-    this.svg_div.appendChild(SVG.createText({text: date.date, attributes : {x: date.position.left - 100, y: date.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: "red"}}))
+    if (typeof date.date == "string"){
+      dateText = date.date
+    }else{
+      dateText = date.date.start+ " - "+ date.date.end
+    }
+    this.svg_div.appendChild(SVG.createText({text: dateText, attributes : {x: date.position.left - 100, y: date.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: "red"}}))
     this.svg_div.appendChild(SVG.createText({text: date.content, attributes : {x: date.position.left + 120, y: date.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: "red"}}))
 
     if (this.children){
