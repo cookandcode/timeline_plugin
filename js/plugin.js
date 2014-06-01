@@ -28,7 +28,10 @@
         img: "url/to/img",
         side: 'right',
         dates: [{
-          date: "2010-07-01", 
+          date: { 
+            start: "2010-07-01",
+            end: "2010-09-01"
+          },
           content: "Stagiaire a la DSI"
         },{
           date: "2011-07-01",
