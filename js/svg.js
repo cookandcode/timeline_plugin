@@ -56,9 +56,6 @@ SVG.createText = function(params){
 
 SVG.createImage = function(params){
   element = new SVG('image')
-  console.log(params)
-  element.setAttribute("x", 0)
-  element.setAttribute("y", 0)
   if (params.attributes){
     _.forEach(params.attributes, function(value, key){
       if (key == "xlink:href"){
@@ -70,5 +67,50 @@ SVG.createImage = function(params){
   }
 
   console.log(element)
+  return element
+}
+
+SVG.createDefs = function(params){
+  element = new SVG('defs')
+  if (params.attributes){
+    _.forEach(params.attributes, function(value, key){
+      element.setAttribute(key, value)
+    })
+  }
+
+  return element
+}
+
+SVG.createPattern = function(params){
+  element = new SVG('pattern')
+  if (params.attributes){
+    _.forEach(params.attributes, function(value, key){
+      element.setAttribute(key, value)
+    })
+  }
+
+  return element
+}
+
+SVG.createGradient = function(params){
+  element = new SVG('linearGradient')
+  if (params.attributes){
+    _.forEach(params.attributes, function(value, key){
+      element.setAttribute(key, value)
+    })
+  }
+
+  return element
+}
+
+
+SVG.createStop = function(params){
+  element = new SVG('stop')
+  if (params.attributes){
+    _.forEach(params.attributes, function(value, key){
+      element.setAttribute(key, value)
+    })
+  }
+
   return element
 }
