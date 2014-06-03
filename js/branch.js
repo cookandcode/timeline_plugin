@@ -9,6 +9,7 @@ var Branch = (function(SVG){
     this.month_gap = 0.00000002 //space between millisecond in px
     this.squareWidth = 100
     this.spaceBetweenBranch = 400
+    this.color = params.color || "black"
 
     // if this branch is a branch child of "position_top" parent
     if (typeof position_top == "object"){
@@ -45,6 +46,35 @@ var Branch = (function(SVG){
     return this
   }
 
+  // Generate Gradient for the transition
+  Branch.prototype.getGradient = function(){
+    //create Pattern for the img
+    _this = this
+
+    if (!this.defDiv){
+        this.defDiv = SVG.createDefs({})
+        this.svg_div.appendChild(this.defDiv)
+    }
+    if (!this.gradient){
+      var gradient = SVG.createGradient({attributes: {id: "Gradient-"+this.getFirstDate()}})
+      if (this.branchSide == "left"){
+        var stop1 = SVG.createStop({attributes: {offset: "0%", "stop-color": this.color}})
+        var stop2 = SVG.createStop({attributes: {offset: "60%", "stop-color": this.parent.color}})
+      }else{
+        var stop1 = SVG.createStop({attributes: {offset: "40%", "stop-color": this.parent.color}})
+        var stop2 = SVG.createStop({attributes: {offset: "100%", "stop-color": this.color}})
+      }
+      gradient.appendChild(stop1)
+      gradient.appendChild(stop2)
+      this.gradient = gradient
+      this.defDiv.appendChild(this.gradient)
+    }
+
+    return this.gradient
+
+  }
+
+
   // Calculate the position of the square with the image of children branch
   Branch.prototype.calculateBeginningPosition = function(){
     _diff_month = Date.parse(this.getFirstDate()) - Date.parse(this.parent.getFirstDate()) //Difference in millisecond
@@ -75,8 +105,24 @@ var Branch = (function(SVG){
   // Square with the img
   Branch.prototype.drawBeginning = function(){
     //create Pattern for the img
-    this.svg_div.appendChild(SVG.createImage({attributes: {x: this.beginning_position.left, y: this.beginning_position.top, "xlink:href": 'http://lemalesaint.fr/media/W1siZiIsIjIwMTQvMDUvbWluaV9mZXVpbGxldGVzX2F1X2phbWJvbl9zZWNfdG9tYXRlX2NoZXZyZV83MTAyYi5qcGciXV0/mini-feuilletes-au-jambon-sec-tomate-chevre.jpg?sha=f379977a', height: this.squareWidth, width: this.squareWidth}}))
-    this.svg_div.appendChild(SVG.createSquare({attributes : {x: this.beginning_position.left, y: this.beginning_position.top, width: this.squareWidth, "fill-opacity": "0", stroke: "red"}}))
+    _this = this
+
+    if (!this.defDiv){
+      //_.forEach(this.svg_div.children, function(child){
+        //if (child.localName == "defs"){
+          //_this.defDiv = child
+        //}
+      //})
+      //if (!this.defDiv) {
+        this.defDiv = SVG.createDefs({})
+        this.svg_div.appendChild(this.defDiv)
+      //}
+    }
+    var image = SVG.createImage({attributes: {x: 0, y: 0, "xlink:href": 'http://lemalesaint.fr/media/W1siZiIsIjIwMTQvMDUvbWluaV9mZXVpbGxldGVzX2F1X2phbWJvbl9zZWNfdG9tYXRlX2NoZXZyZV83MTAyYi5qcGciXV0/mini-feuilletes-au-jambon-sec-tomate-chevre.jpg?sha=f379977a', height: this.squareWidth, width: this.squareWidth, preserveAspectRatio:"none"}})
+    var pattern = SVG.createPattern({attributes: {id: this.getFirstDate(),  width: 100, height: 100}})
+    pattern.appendChild(image)
+    this.defDiv.appendChild(pattern)
+    this.svg_div.appendChild(SVG.createSquare({attributes : {x: this.beginning_position.left, y: this.beginning_position.top, width: this.squareWidth, "fill": "url(#"+this.getFirstDate()+")", stroke: this.color}}))
   }
 
   Branch.prototype.parseDate = function(){
@@ -138,23 +184,24 @@ var Branch = (function(SVG){
     // Create the transition line
     if (index == 0 && this.parent){
       if (this.branchSide == "left"){
-        tx1 = this.beginning_position.left + this.spaceBetweenBranch + this.squareWidth / 2
+        //tx1 = this.beginning_position.left + this.spaceBetweenBranch + this.squareWidth / 2
+        //ty1 = this.beginning_position.top + this.squareWidth + 50
+        tx1 = this.beginning_position.left + this.squareWidth / 2
         ty1 = this.beginning_position.top + this.squareWidth + 50
-        tx2 = this.beginning_position.left + this.squareWidth / 2
-        ty2 = this.beginning_position.top + this.squareWidth + 50
       }else{
         tx1 = this.beginning_position.left - this.spaceBetweenBranch + this.squareWidth / 2
         ty1 = this.beginning_position.top + this.squareWidth + 50
-        tx2 = this.beginning_position.left + this.squareWidth / 2
-        ty2 = this.beginning_position.top + this.squareWidth + 50
+        //tx2 = this.beginning_position.left + this.squareWidth / 2
+        //ty2 = this.beginning_position.top + this.squareWidth + 50
       }
-      this.svg_div.appendChild(SVG.createLine({attributes: {x1: tx1, y1: ty1, x2: tx2, y2: ty2, stroke: "red"}}))
+      //this.svg_div.appendChild(SVG.createLine({attributes: {x1: tx1, y1: ty1, x2: tx2, y2: ty2, stroke: "url(#"+this.getGradient().id+")", "stroke-width": "10"}}))
+      this.svg_div.appendChild(SVG.createRect({attributes: {x: tx1, y: ty1, width: this.spaceBetweenBranch, height: 1, fill: "url(#"+this.getGradient().id+")"}}))
     }
     
     // Draw Line From previous date to the next date
-    this.svg_div.appendChild(SVG.createLine({attributes: {x1: line_x1, y1: line_y1, x2: line_x2, y2: line_y2, stroke: "red"}}))
+    this.svg_div.appendChild(SVG.createLine({attributes: {x1: line_x1, y1: line_y1, x2: line_x2, y2: line_y2, stroke: this.color}}))
     // Draw Square for the new date
-    this.svg_div.appendChild(SVG.createSquare({attributes : {x: date.position.left, y: date.position.top, width: this.squareWidth, fill: "transparent", stroke: "red"}}))
+    this.svg_div.appendChild(SVG.createSquare({attributes : {x: date.position.left, y: date.position.top, width: this.squareWidth, fill: "transparent", stroke: this.color}}))
     //update the total Height of the branch
     this.updateTotalHeight(date.position.top + this.squareWidth)
 
@@ -164,8 +211,8 @@ var Branch = (function(SVG){
     }else{
       dateText = date.date.start+ " - "+ date.date.end
     }
-    this.svg_div.appendChild(SVG.createText({text: dateText, attributes : {x: date.position.left - 100, y: date.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: "red"}}))
-    this.svg_div.appendChild(SVG.createText({text: date.content, attributes : {x: date.position.left + 120, y: date.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: "red"}}))
+    this.svg_div.appendChild(SVG.createText({text: dateText, attributes : {x: date.position.left - 100, y: date.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.color}}))
+    this.svg_div.appendChild(SVG.createText({text: date.content, attributes : {x: date.position.left + 120, y: date.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.color}}))
 
     if (this.children){
     _.forEach(this.children, function(branch, k){
