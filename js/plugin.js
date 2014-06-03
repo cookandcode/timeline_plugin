@@ -2,6 +2,7 @@
   var branches = [{
     name: "Ecole",
     img: "url/to/img",
+    color: "#fff1c2",
     dates: [{
       date: "2009-09-01", 
       content: "1ere année à Supinfo"
@@ -24,7 +25,7 @@
     children: [
       {
         name: "Work",
-        from: "Ecole",
+        color: "#addef8",
         img: "url/to/img",
         side: 'right',
         dates: [{
@@ -47,6 +48,7 @@
         name: "Le Male Saint",
         side: 'left',
         img: "url/to/img",
+        color: "#6ce5c7",
         dates: [{
           date: "2013-01-01", 
           content: "Lancement du Blog"
