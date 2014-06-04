@@ -104,11 +104,33 @@ var Branch = (function(SVG){
   }
 
 
+  // Write the branch name
+  Branch.prototype.writeName = function(){
+    var topName = this.beginning_position.top - 10
+    var branchNameElement = SVG.createText({text: this.name, attributes : {x: 0, y: topName, fill: "transparent", stroke: this.color}})
+    this.svg_div.appendChild(branchNameElement)
+    var leftName = this.getLeftBeginning() + ((this.beginningSquareWidth + (this.lineThickness * 2) - branchNameElement.offsetWidth) / 2)
+    branchNameElement.setAttribute('x', leftName)
+  }
+
+  // Get the left position of the beginning square
+  // because it can be differente if the squarewidth and the beginningsquarewidth are different
+  // Permit to have the beginningsquare center relative to the other square
+  Branch.prototype.getLeftBeginning = function(){
+    if (this.beginningSquareWidth != this.squareWidth){
+      return (this.beginning_position.left - (this.beginningSquareWidth - this.squareWidth)/2)
+    }else{
+      return this.beginning_position.left
+    }
+  }
+
+
   // Draw the beginning square 
   // Square with the img
   Branch.prototype.drawBeginning = function(){
     //create Pattern for the img
     _this = this
+    this.writeName()
 
     if (!this.defDiv){
       //_.forEach(this.svg_div.children, function(child){
@@ -125,11 +147,7 @@ var Branch = (function(SVG){
     var pattern = SVG.createPattern({attributes: {id: this.getFirstDate(),  width: 100, height: 100}})
     pattern.appendChild(image)
     this.defDiv.appendChild(pattern)
-    // To center the beginning square
-    if (this.beginningSquareWidth != this.squareWidth){
-      var leftBeginning = this.beginning_position.left - (this.beginningSquareWidth - this.squareWidth)/2
-    }
-    this.svg_div.appendChild(SVG.createSquare({attributes : {x: leftBeginning, y: this.beginning_position.top, width: this.beginningSquareWidth, "fill": "url(#"+this.getFirstDate()+")", stroke: this.color, "stroke-width": this.lineThickness}}))
+    this.svg_div.appendChild(SVG.createSquare({attributes : {x: this.getLeftBeginning(), y: this.beginning_position.top, width: this.beginningSquareWidth, "fill": "url(#"+this.getFirstDate()+")", stroke: this.color, "stroke-width": this.lineThickness}}))
   }
 
   // Parse date to define the position of the date
