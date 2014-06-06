@@ -9,6 +9,7 @@ var Branch = (function(SVG){
     this.month_gap = 0.00000002 //space between millisecond in px ~= 55px for a month
     this.squareWidth = 50
     this.beginningSquareWidth = 70
+    this.curveSize = 5
     this.lineThickness = 4
     this.spaceBetweenBranch = 400
     this.color = params.color || "black"
@@ -148,7 +149,7 @@ var Branch = (function(SVG){
     var pattern = SVG.createPattern({attributes: {id: this.getFirstDate(),  width: 100, height: 100}})
     pattern.appendChild(image)
     this.defDiv.appendChild(pattern)
-    this.svg_div.appendChild(SVG.createSquare({attributes : {x: this.getLeftBeginning(), y: this.beginning_position.top, width: this.beginningSquareWidth, "fill": "url(#"+this.getFirstDate()+")", stroke: this.color, "stroke-width": this.lineThickness}}))
+    this.svg_div.appendChild(SVG.createSquare({attributes : {rx: this.curveSize, x: this.getLeftBeginning(), y: this.beginning_position.top, width: this.beginningSquareWidth, "fill": "url(#"+this.getFirstDate()+")", stroke: this.color, "stroke-width": this.lineThickness}}))
   }
 
   // Parse date to define the position of the date
@@ -250,7 +251,7 @@ var Branch = (function(SVG){
     // Draw Line From previous date to the next date
     this.svg_div.appendChild(SVG.createLine({attributes: {x1: line_x1, y1: line_y1, x2: line_x2, y2: line_y2, stroke: this.color, "stroke-width": this.lineThickness},}))
     // Draw Square for the new date
-    this.svg_div.appendChild(SVG.createSquare({attributes : {x: date.position.left, y: date.position.top, width: this.squareWidth, fill: "transparent", stroke: this.color, "stroke-width": this.lineThickness}}))
+    this.svg_div.appendChild(SVG.createSquare({attributes : {rx: this.curveSize, x: date.position.left, y: date.position.top, width: this.squareWidth, fill: "transparent", stroke: this.color, "stroke-width": this.lineThickness}}))
     //update the total Height of the branch
     this.updateTotalHeight(date.position.top + this.squareWidth)
 
