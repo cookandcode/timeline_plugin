@@ -6,12 +6,13 @@ var Branch = (function(SVG){
   // svg_div = DOM element which correspond to the svg element
   Branch = function(params, position_top, position_left, svg_div){
     var _this = this
-    this.month_gap = 0.00000002 //space between millisecond in px
+    this.month_gap = 0.00000002 //space between millisecond in px ~= 55px for a month
     this.squareWidth = 50
     this.beginningSquareWidth = 70
     this.lineThickness = 4
     this.spaceBetweenBranch = 400
     this.color = params.color || "black"
+    this.heightFirstLine = 200
 
     // if this branch is a branch child of "position_top" parent
     if (typeof position_top == "object"){
@@ -79,8 +80,8 @@ var Branch = (function(SVG){
 
   // Calculate the position of the square with the image of children branch
   Branch.prototype.calculateBeginningPosition = function(){
-    _diff_month = Date.parse(this.getFirstDate()) - Date.parse(this.parent.getFirstDate()) //Difference in millisecond
-    var _top = this.parent.beginning_position.top + parseInt(_diff_month) * this.month_gap - 200
+    var _diff_month = Date.parse(this.getFirstDate()) - Date.parse(this.parent.getFirstDate()) //Difference in millisecond
+    var _top = this.parent.beginning_position.top + (parseInt(_diff_month) * this.month_gap) 
     var _left = this.parent.beginning_position.left
     //the branch is at the left or at the right of the master branch
     if (this.branchSide == "left"){
@@ -143,7 +144,7 @@ var Branch = (function(SVG){
         this.svg_div.appendChild(this.defDiv)
       //}
     }
-    var image = SVG.createImage({attributes: {x: 0, y: 0, "xlink:href": 'http://lemalesaint.fr/media/W1siZiIsIjIwMTQvMDUvbWluaV9mZXVpbGxldGVzX2F1X2phbWJvbl9zZWNfdG9tYXRlX2NoZXZyZV83MTAyYi5qcGciXV0/mini-feuilletes-au-jambon-sec-tomate-chevre.jpg?sha=f379977a', height: this.beginningSquareWidth, width: this.beginningSquareWidth, preserveAspectRatio:"none"}})
+    var image = SVG.createImage({attributes: {x: 0, y: 0, "xlink:href": '', height: this.beginningSquareWidth, width: this.beginningSquareWidth, preserveAspectRatio:"none"}})
     var pattern = SVG.createPattern({attributes: {id: this.getFirstDate(),  width: 100, height: 100}})
     pattern.appendChild(image)
     this.defDiv.appendChild(pattern)
@@ -154,9 +155,9 @@ var Branch = (function(SVG){
   // and add date in js format
   Branch.prototype.parseDate = function(){
     var _this = this
-    _left = this.beginning_position.left
-    _top = parseInt(this.beginning_position.top)
-    _date_before = null
+    var _left = this.beginning_position.left
+    var _top = parseInt(this.beginning_position.top)
+    var _date_before = null
     _.forEach(this.dates, function(date){
           if (typeof date.date == "string"){
             date.parsedDate = Date.parse(date.date)
@@ -164,10 +165,10 @@ var Branch = (function(SVG){
             date.parsedDate = Date.parse(date.date.start)
           }
           if (!_date_before)
-            _top += 200
+            _top +=  _this.heightFirstLine
           else{
             _diff_month = date.parsedDate - _date_before.parsedDate //Difference in millisecond
-            _top += parseInt(_diff_month) * _this.month_gap
+            _top = _date_before.position.top + parseInt(_diff_month) * _this.month_gap
           }
           date.position = {
             top: _top,
@@ -181,8 +182,14 @@ var Branch = (function(SVG){
   Branch.prototype.drawIt = function(){
     var _this = this
     _.forEach(this.dates, function(date, k){
-      _this.drawDate(date, k)
+      _this.drawDate(date)
     })
+
+    if (this.children){
+      _.forEach(this.children, function(branch, k){
+        branch.drawIt()
+      })
+    }
   }
 
   // Update the total height of the branch
@@ -196,20 +203,24 @@ var Branch = (function(SVG){
     }
   }
 
-  Branch.prototype.drawDate = function(date, index){
+  Branch.prototype.drawDate = function(date){
+    var _this = this
+    var index = this.dates.indexOf(date)
+    //
     // Draw path from the previous
     // Draw the square when arrive on it
     if (index == 0){
       // Draw the square with the image
       this.drawBeginning()
-      line_x1 = this.beginning_position.left + this.squareWidth/2
-      line_y1 = this.beginning_position.top + this.beginningSquareWidth
+      var line_x1 = this.beginning_position.left + this.squareWidth/2
+      var line_y1 = this.beginning_position.top + this.beginningSquareWidth
     }else{
-      line_x1 = this.dates[index-1].position.left + this.squareWidth/2
-      line_y1 = this.dates[index-1].position.top + this.squareWidth
+      var line_x1 = this.dates[index-1].position.left + this.squareWidth/2
+      var line_y1 = this.dates[index-1].position.top + this.squareWidth
     }
-    line_x2 = date.position.left + this.squareWidth/2
-    line_y2 = date.position.top
+    console.log(this.dates[index-1], date)
+    var line_x2 = date.position.left + this.squareWidth/2
+    var line_y2 = date.position.top
     
     // Create the transition line
     // between the master branch and the children branch
@@ -217,14 +228,21 @@ var Branch = (function(SVG){
       if (this.branchSide == "left"){
         //tx1 = this.beginning_position.left + this.spaceBetweenBranch + this.squareWidth / 2
         //ty1 = this.beginning_position.top + this.squareWidth + 50
-        tx1 = this.beginning_position.left + this.squareWidth / 2
-        ty1 = this.beginning_position.top + this.squareWidth + 50
+        var tx1 = this.beginning_position.left + this.squareWidth / 2
+        var ty1 = this.beginning_position.top + this.squareWidth + 50
       }else{
-        tx1 = this.beginning_position.left - this.spaceBetweenBranch + this.squareWidth / 2
-        ty1 = this.beginning_position.top + this.squareWidth + 50
+        var tx1 = this.beginning_position.left - this.spaceBetweenBranch + this.squareWidth / 2
+        var ty1 = this.beginning_position.top + this.squareWidth + 50
         //tx2 = this.beginning_position.left + this.squareWidth / 2
         //ty2 = this.beginning_position.top + this.squareWidth + 50
       }
+      //check if the line is not on date square
+      //if it is the case, so the line is move under the square
+      _.forEach(this.parent.dates, function(date){
+        if (ty1 >= date.position.top && ty1 <= date.position.top + _this.squareWidth){
+          ty1 = date.position.top + _this.squareWidth + 10
+        }
+      })
       //this.svg_div.appendChild(SVG.createLine({attributes: {x1: tx1, y1: ty1, x2: tx2, y2: ty2, stroke: "url(#"+this.getGradient().id+")", "stroke-width": "10"}}))
       this.svg_div.appendChild(SVG.createRect({attributes: {x: tx1, y: ty1, width: this.spaceBetweenBranch, height: this.lineThickness, fill: "url(#"+this.getGradient().id+")"}}))
     }
@@ -244,12 +262,6 @@ var Branch = (function(SVG){
     }
     this.svg_div.appendChild(SVG.createText({text: dateText, attributes : {x: date.position.left - 100, y: date.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.color}}))
     this.svg_div.appendChild(SVG.createText({text: date.content, attributes : {x: date.position.left + 120, y: date.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.color}}))
-
-    if (this.children){
-    _.forEach(this.children, function(branch, k){
-      branch.drawIt()
-    })
-    }
   }
 
   return Branch
