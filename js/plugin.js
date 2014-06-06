@@ -3,7 +3,7 @@
     name: "Ecole",
     img: "url/to/img",
     color: "#fff1c2",
-    dates: [{
+    events: [{
       date: "2009-09-01", 
       content: "1ere année à Supinfo"
     },{
@@ -37,7 +37,7 @@
         color: "#addef8",
         img: "url/to/img",
         side: 'right',
-        dates: [{
+        events: [{
           date: { 
             start: "2010-07-01",
             end: "2010-09-01"
@@ -58,7 +58,7 @@
         side: 'left',
         img: "url/to/img",
         color: "#6ce5c7",
-        dates: [{
+        events: [{
           date: "2013-01-01", 
           content: "Lancement du Blog"
         }]
@@ -69,7 +69,7 @@
   if (!div){
     alert('no div')
   }else{
-    svg_width = div.width.baseVal.value
+    svg_width = div.offsetWidth
     square_width = 100
     month_height = 200
     center = (svg_width - square_width)/ 2 //100 == width of carre
