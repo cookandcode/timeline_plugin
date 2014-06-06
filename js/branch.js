@@ -22,7 +22,7 @@ var Branch = (function(SVG){
     }
     this.name = params.name
     this.img = params.img
-    this.dates = params.dates
+    this.events = params.events
     this.isMaster = !this.parent
 
 
@@ -36,10 +36,10 @@ var Branch = (function(SVG){
     }
     this.svg_div = svg_div || this.parent.svg_div
 
-    if (params.dates.length > 0)
-      this.date_beginning = new Date(Date.parse(params.dates[0].date))
+    if (params.events.length > 0)
+      this.event_beginning = new Date(Date.parse(params.events[0].date))
 
-    this.parseDate()
+    this.parseEvents()
 
     if (params.children){
       this.children = []
@@ -98,10 +98,10 @@ var Branch = (function(SVG){
 
   // Return the first date for the branch
   Branch.prototype.getFirstDate = function(){
-    if (typeof this.dates[0].date == "string"){
-      return this.dates[0].date
+    if (typeof this.events[0].date == "string"){
+      return this.events[0].date
     }else{
-      return this.dates[0].date.start
+      return this.events[0].date.start
     }
   }
 
@@ -152,38 +152,38 @@ var Branch = (function(SVG){
     this.svg_div.appendChild(SVG.createSquare({attributes : {rx: this.curveSize, x: this.getLeftBeginning(), y: this.beginning_position.top, width: this.beginningSquareWidth, "fill": "url(#"+this.getFirstDate()+")", stroke: this.color, "stroke-width": this.lineThickness}}))
   }
 
-  // Parse date to define the position of the date
+  // Parse event to define the position of the event
   // and add date in js format
-  Branch.prototype.parseDate = function(){
+  Branch.prototype.parseEvents = function(){
     var _this = this
     var _left = this.beginning_position.left
     var _top = parseInt(this.beginning_position.top)
-    var _date_before = null
-    _.forEach(this.dates, function(date){
-          if (typeof date.date == "string"){
-            date.parsedDate = Date.parse(date.date)
+    var _event_before = null
+    _.forEach(this.events, function(event){
+          if (typeof event.date == "string"){
+            event.parsedDate = Date.parse(event.date)
           }else{
-            date.parsedDate = Date.parse(date.date.start)
+            event.parsedDate = Date.parse(event.date.start)
           }
-          if (!_date_before)
+          if (!_event_before)
             _top +=  _this.heightFirstLine
           else{
-            _diff_month = date.parsedDate - _date_before.parsedDate //Difference in millisecond
-            _top = _date_before.position.top + parseInt(_diff_month) * _this.month_gap
+            _diff_month = event.parsedDate - _event_before.parsedDate //Difference in millisecond
+            _top = _event_before.position.top + parseInt(_diff_month) * _this.month_gap
           }
-          date.position = {
+          event.position = {
             top: _top,
             left: _left
           }
-          _date_before = date
+          _event_before = event
     })
   }
 
   // Function to draw the entire branch
   Branch.prototype.drawIt = function(){
     var _this = this
-    _.forEach(this.dates, function(date, k){
-      _this.drawDate(date)
+    _.forEach(this.events, function(event, k){
+      _this.drawEvent(event)
     })
 
     if (this.children){
@@ -204,9 +204,15 @@ var Branch = (function(SVG){
     }
   }
 
-  Branch.prototype.drawDate = function(date){
+  // Total height of a square
+  // height + border
+  Branch.prototype.fullSquareSize = function(){
+    return this.squareWidth + this.lineThickness * 2
+  }
+
+  Branch.prototype.drawEvent = function(event){
     var _this = this
-    var index = this.dates.indexOf(date)
+    var index = this.events.indexOf(event)
     //
     // Draw path from the previous
     // Draw the square when arrive on it
@@ -216,12 +222,11 @@ var Branch = (function(SVG){
       var line_x1 = this.beginning_position.left + this.squareWidth/2
       var line_y1 = this.beginning_position.top + this.beginningSquareWidth
     }else{
-      var line_x1 = this.dates[index-1].position.left + this.squareWidth/2
-      var line_y1 = this.dates[index-1].position.top + this.squareWidth
+      var line_x1 = this.events[index-1].position.left + this.squareWidth/2
+      var line_y1 = this.events[index-1].position.top + this.squareWidth
     }
-    console.log(this.dates[index-1], date)
-    var line_x2 = date.position.left + this.squareWidth/2
-    var line_y2 = date.position.top
+    var line_x2 = event.position.left + this.squareWidth/2
+    var line_y2 = event.position.top
     
     // Create the transition line
     // between the master branch and the children branch
@@ -237,32 +242,44 @@ var Branch = (function(SVG){
         //tx2 = this.beginning_position.left + this.squareWidth / 2
         //ty2 = this.beginning_position.top + this.squareWidth + 50
       }
-      //check if the line is not on date square
+      //check if the line is not on event square
       //if it is the case, so the line is move under the square
-      _.forEach(this.parent.dates, function(date){
-        if (ty1 >= date.position.top && ty1 <= date.position.top + _this.squareWidth){
-          ty1 = date.position.top + _this.squareWidth + 10
+      _.forEach(this.parent.events, function(event){
+        if (ty1 >= event.position.top && ty1 <= event.position.top + _this.squareWidth){
+          ty1 = event.position.top + _this.squareWidth + 10
         }
       })
       //this.svg_div.appendChild(SVG.createLine({attributes: {x1: tx1, y1: ty1, x2: tx2, y2: ty2, stroke: "url(#"+this.getGradient().id+")", "stroke-width": "10"}}))
       this.svg_div.appendChild(SVG.createRect({attributes: {x: tx1, y: ty1, width: this.spaceBetweenBranch, height: this.lineThickness, fill: "url(#"+this.getGradient().id+")"}}))
     }
     
-    // Draw Line From previous date to the next date
+    // Draw Line From previous event to the next event
     this.svg_div.appendChild(SVG.createLine({attributes: {x1: line_x1, y1: line_y1, x2: line_x2, y2: line_y2, stroke: this.color, "stroke-width": this.lineThickness},}))
-    // Draw Square for the new date
-    this.svg_div.appendChild(SVG.createSquare({attributes : {rx: this.curveSize, x: date.position.left, y: date.position.top, width: this.squareWidth, fill: "transparent", stroke: this.color, "stroke-width": this.lineThickness}}))
+    // Draw Square for the new event
+    this.svg_div.appendChild(SVG.createSquare({attributes : {rx: this.curveSize, x: event.position.left, y: event.position.top, width: this.squareWidth, fill: "transparent", stroke: this.color, "stroke-width": this.lineThickness}}))
     //update the total Height of the branch
-    this.updateTotalHeight(date.position.top + this.squareWidth)
+    this.updateTotalHeight(event.position.top + this.squareWidth)
 
-    // Draw Text for the new date
-    if (typeof date.date == "string"){
-      dateText = date.date
+    // Draw Text for the new event
+    if (typeof event.date == "string"){
+      var d = new Date(event.parsedDate)
+      eventText = d.toDateString()
     }else{
-      dateText = date.date.start+ " - "+ date.date.end
+      var start = new Date(event.parsedDate)
+      var end = new Date(Date.parse(event.date.end))
+      eventText = start.toDateString() + " \n " + end.toDateString()
     }
-    this.svg_div.appendChild(SVG.createText({text: dateText, attributes : {x: date.position.left - 100, y: date.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.color}}))
-    this.svg_div.appendChild(SVG.createText({text: date.content, attributes : {x: date.position.left + 120, y: date.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.color}}))
+    var dateTextElement = SVG.createText({text: eventText, attributes : {x: event.position.left - 100, y: event.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.color}})
+    var contentTextElement = SVG.createText({text: event.content, attributes : {x: event.position.left + 120, y: event.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.color}})
+    this.svg_div.appendChild(dateTextElement)
+    this.svg_div.appendChild(contentTextElement)
+    // Set x and y here
+    // in order to center the text and have the same margin
+    dateTextElement.setAttribute("x", this.beginning_position.left - dateTextElement.offsetWidth - 20)
+    dateTextElement.setAttribute("y", event.position.top + this.squareWidth / 2 + dateTextElement.offsetHeight / 2)
+    contentTextElement.setAttribute("x", this.beginning_position.left + this.squareWidth + 20)
+    contentTextElement.setAttribute("y", event.position.top + this.squareWidth / 2 + contentTextElement.offsetHeight / 2)
+    console.log("height", contentTextElement.offsetHeight)
   }
 
   return Branch
