@@ -13,7 +13,16 @@
       date: "2011-09-01",
       content: "3eme année à Supinfo"
     },{
+      date: "2012-07-01",
+      content: "3ème année à EFFICOM"
+    },{
       date: "2012-09-01",
+      content: "3ème année à EFFICOM"
+    },{
+      date: "2012-11-01",
+      content: "3ème année à EFFICOM"
+    },{
+      date: "2013-01-01",
       content: "3ème année à EFFICOM"
     },{
       date: "2013-09-01",
