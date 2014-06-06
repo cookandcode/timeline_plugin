@@ -7,7 +7,6 @@
 
 # TODO
 
-- Show the image (see pattern svg to set a background in rect element)
 - Refacto the code
 - Add show date on scroll
 - Add the possibility to personalize the timeline easily ! (Attribute in html for example)
@@ -16,3 +15,4 @@
 # DONE
 
 - Add begin/end possibility on the date (if no end, script suppose the event is during up to the next event)
+- Show the image (see pattern svg to set a background in rect element)
