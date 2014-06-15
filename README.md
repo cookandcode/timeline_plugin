@@ -7,6 +7,7 @@
 
 # TODO
 
+- When timeline is generating on small screen, we can't see all the branch
 - Refacto the code
 - Add show date on scroll
 - Add the possibility to personalize the timeline easily ! (Attribute in html for example)
