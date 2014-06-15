@@ -23,7 +23,6 @@ var Timeline = (function(Branch){
 
   Timeline.prototype.drawTimeline = function(){
     // Bug with this in timeline
-    console.log(this)
     var _this = this
     var _hereWeAre = 0
     //cloneBranch = _.clone(this.branches)
@@ -37,8 +36,7 @@ var Timeline = (function(Branch){
   Timeline.prototype.getHeight = function(){
     var totalHeight = 0
     _.forEach(this.branches, function(branch){
-      console.log(branch)
-      if (branch.totalHeight > totalHeight) totalHeight = branch.totalHeight
+      if (branch.totalHeight > totalHeight) totalHeight = branch.totalHeight + 10
     })
     return totalHeight+"px"
   }
