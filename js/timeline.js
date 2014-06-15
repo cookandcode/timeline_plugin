@@ -17,6 +17,7 @@ var Timeline = (function(Branch){
 
     this.drawTimeline()
     this.svg_div.setAttribute('height', this.getHeight())
+    this.svg_div.setAttribute('width', this.getWidth())
 
     return this
   }
@@ -30,6 +31,15 @@ var Timeline = (function(Branch){
     _.forEach(this.branches, function(branch, k){
       branch.drawIt()
     })
+  }
+
+  Timeline.prototype.getWidth = function(){
+    var maxWidth = 0
+    _.forEach(this.branches, function(branch){
+      if (branch.maxWidth > maxWidth) maxWidth = branch.maxWidth
+    })
+
+    return maxWidth
   }
 
   // Get the height of the Timeline

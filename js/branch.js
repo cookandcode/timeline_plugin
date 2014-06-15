@@ -194,6 +194,17 @@ var Branch = (function(SVG){
     }
   }
 
+  // Update the maximun Width of the branch
+  Branch.prototype.updateMaxWidth = function(leftX, rightX, rightWidth){
+    if (this.parent)
+      this.parent.updateMaxWidth(leftX, rightX, rightWidth)
+    else{
+      var width = parseInt(rightX) + rightWidth
+      if (!this.maxWidth || parseInt(width) > parseInt(this.maxWidth)){ 
+        this.maxWidth = width
+      }
+    }
+  }
   // Update the total height of the branch
   Branch.prototype.updateTotalHeight = function(height){
     if (this.parent)
@@ -274,7 +285,9 @@ var Branch = (function(SVG){
       var dateTextElementEnd = SVG.createText({text: end.toDateString(), attributes : {x: event.position.left - 100, y: 0, width: this.squareWidth, fill: "transparent", stroke: this.text_color}})
     }
 
-    var contentTextElement = SVG.createTextArea({html: event.content, attributes : {x: event.position.left + 120, y: event.position.top + this.squareWidth/2, width: this.spaceBetweenBranch - this.squareWidth, fill: "transparent", stroke: this.text_color, height: 100}})
+    var xContentText = this.beginning_position.left + this.squareWidth + 20
+    var widthContent = this.spaceBetweenBranch / 2 - (xContentText - event.position.left)  
+    var contentTextElement = SVG.createTextArea({html: event.content, attributes : {x: xContentText, width: widthContent,  fill: "transparent", stroke: this.text_color, height: 100}})
     this.svg_div.appendChild(dateTextElement)
     this.svg_div.appendChild(contentTextElement)
     // Set x and y here
@@ -294,8 +307,11 @@ var Branch = (function(SVG){
 
     //get the height of the div to center the content
     var heightContent = contentTextElement.children[0].offsetHeight 
-    contentTextElement.setAttribute("x", this.beginning_position.left + this.squareWidth + 20)
     contentTextElement.setAttribute("y", event.position.top + this.squareWidth / 2 - heightContent / 2)
+
+    this.updateMaxWidth(dateTextElement.getAttribute("x"), contentTextElement.getAttribute("x"), contentTextElement.offsetWidth)
+
+
   }
 
   return Branch
