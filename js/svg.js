@@ -53,6 +53,30 @@ SVG.createText = function(params){
   return element
 }
 
+SVG.createTextArea = function(params){
+  var element = new SVG('foreignObject')
+  if (params.attributes){
+    _.forEach(params.attributes, function(value, key){
+      element.setAttribute(key, value)
+    })
+  }
+
+  var div = document.createElement("div");
+  var style = [] 
+  if (params.attributes && params.attributes.width){
+    style.push("width:"+(params.attributes.width - 50))
+  }
+
+  if (params.attributes && params.attributes.stroke){
+    style.push("color:"+params.attributes.stroke)
+  }
+  div.setAttribute("style", style.join(";"))
+  div.innerHTML = params.html
+  element.appendChild(div)
+
+  return element
+}
+
 SVG.createImage = function(params){
   var element = new SVG('image')
   if (params.attributes){

@@ -11,7 +11,7 @@ var Branch = (function(SVG){
     this.beginningSquareWidth = 70
     this.curveSize = 5
     this.lineThickness = 4
-    this.spaceBetweenBranch = 400
+    this.spaceBetweenBranch = 500
     this.color = params.color || "black"
     this.text_color = params.text_color || this.color
     this.heightFirstLine = 200
@@ -273,7 +273,8 @@ var Branch = (function(SVG){
       var dateTextElement = SVG.createText({text: start.toDateString(), attributes : {x: event.position.left - 100, y: 0, width: this.squareWidth, fill: "transparent", stroke: this.text_color}})
       var dateTextElementEnd = SVG.createText({text: end.toDateString(), attributes : {x: event.position.left - 100, y: 0, width: this.squareWidth, fill: "transparent", stroke: this.text_color}})
     }
-    var contentTextElement = SVG.createText({text: event.content, attributes : {x: event.position.left + 120, y: event.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.text_color}})
+
+    var contentTextElement = SVG.createTextArea({html: event.content, attributes : {x: event.position.left + 120, y: event.position.top + this.squareWidth/2, width: this.spaceBetweenBranch - this.squareWidth, fill: "transparent", stroke: this.text_color, height: 100}})
     this.svg_div.appendChild(dateTextElement)
     this.svg_div.appendChild(contentTextElement)
     // Set x and y here
@@ -290,8 +291,11 @@ var Branch = (function(SVG){
       dateTextElement.setAttribute("x", this.beginning_position.left - dateTextElement.offsetWidth - 20)
       dateTextElement.setAttribute("y", event.position.top + this.squareWidth / 2 + dateTextElement.offsetHeight / 2)
     }
+
+    //get the height of the div to center the content
+    var heightContent = contentTextElement.children[0].offsetHeight 
     contentTextElement.setAttribute("x", this.beginning_position.left + this.squareWidth + 20)
-    contentTextElement.setAttribute("y", event.position.top + this.squareWidth / 2 + contentTextElement.offsetHeight / 2)
+    contentTextElement.setAttribute("y", event.position.top + this.squareWidth / 2 - heightContent / 2)
   }
 
   return Branch
