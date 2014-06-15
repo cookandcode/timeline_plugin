@@ -13,6 +13,7 @@ var Branch = (function(SVG){
     this.lineThickness = 4
     this.spaceBetweenBranch = 400
     this.color = params.color || "black"
+    this.text_color = params.text_color || this.color
     this.heightFirstLine = 200
 
     // if this branch is a branch child of "position_top" parent
@@ -145,7 +146,7 @@ var Branch = (function(SVG){
         this.svg_div.appendChild(this.defDiv)
       //}
     }
-    var image = SVG.createImage({attributes: {x: 0, y: 0, "xlink:href": '', height: this.beginningSquareWidth, width: this.beginningSquareWidth, preserveAspectRatio:"none"}})
+    var image = SVG.createImage({attributes: {x: 0, y: 0, "xlink:href": this.img, height: this.beginningSquareWidth, width: this.beginningSquareWidth, preserveAspectRatio: "none"}})
     var pattern = SVG.createPattern({attributes: {id: this.getFirstDate(),  width: 100, height: 100}})
     pattern.appendChild(image)
     this.defDiv.appendChild(pattern)
@@ -264,22 +265,33 @@ var Branch = (function(SVG){
     if (typeof event.date == "string"){
       var d = new Date(event.parsedDate)
       eventText = d.toDateString()
+      var dateTextElement = SVG.createText({text: eventText, attributes : {x: event.position.left - 100, y: event.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.text_color}})
     }else{
       var start = new Date(event.parsedDate)
       var end = new Date(Date.parse(event.date.end))
-      eventText = start.toDateString() + " \n " + end.toDateString()
+      var spaceBetweenText = 10
+      var dateTextElement = SVG.createText({text: start.toDateString(), attributes : {x: event.position.left - 100, y: 0, width: this.squareWidth, fill: "transparent", stroke: this.text_color}})
+      var dateTextElementEnd = SVG.createText({text: end.toDateString(), attributes : {x: event.position.left - 100, y: 0, width: this.squareWidth, fill: "transparent", stroke: this.text_color}})
     }
-    var dateTextElement = SVG.createText({text: eventText, attributes : {x: event.position.left - 100, y: event.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.color}})
-    var contentTextElement = SVG.createText({text: event.content, attributes : {x: event.position.left + 120, y: event.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.color}})
+    var contentTextElement = SVG.createText({text: event.content, attributes : {x: event.position.left + 120, y: event.position.top + this.squareWidth/2, width: this.squareWidth, fill: "transparent", stroke: this.text_color}})
     this.svg_div.appendChild(dateTextElement)
     this.svg_div.appendChild(contentTextElement)
     // Set x and y here
     // in order to center the text and have the same margin
-    dateTextElement.setAttribute("x", this.beginning_position.left - dateTextElement.offsetWidth - 20)
-    dateTextElement.setAttribute("y", event.position.top + this.squareWidth / 2 + dateTextElement.offsetHeight / 2)
+    // If startDate and endDate
+    if (dateTextElementEnd){
+      this.svg_div.appendChild(dateTextElementEnd)
+      var maxWidth = (dateTextElementEnd.offsetWidth > dateTextElement.offsetWidth) ? dateTextElementEnd.offsetWidth : dateTextElement.offsetWidth
+      dateTextElement.setAttribute("x", this.beginning_position.left - maxWidth - 20)
+      dateTextElement.setAttribute("y", event.position.top + this.squareWidth / 2 - spaceBetweenText/2)
+      dateTextElementEnd.setAttribute("x", this.beginning_position.left - maxWidth - 20)
+      dateTextElementEnd.setAttribute("y", parseInt(dateTextElement.getAttribute("y")) + dateTextElement.offsetHeight + spaceBetweenText)
+    }else{
+      dateTextElement.setAttribute("x", this.beginning_position.left - dateTextElement.offsetWidth - 20)
+      dateTextElement.setAttribute("y", event.position.top + this.squareWidth / 2 + dateTextElement.offsetHeight / 2)
+    }
     contentTextElement.setAttribute("x", this.beginning_position.left + this.squareWidth + 20)
     contentTextElement.setAttribute("y", event.position.top + this.squareWidth / 2 + contentTextElement.offsetHeight / 2)
-    console.log("height", contentTextElement.offsetHeight)
   }
 
   return Branch

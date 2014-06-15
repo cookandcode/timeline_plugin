@@ -3,6 +3,7 @@
     name: "Ecole",
     img: "url/to/img",
     color: "#fff1c2",
+    text_color: "white",
     events: [{
       date: "2009-09-01", 
       content: "1ere année à Supinfo"
@@ -35,6 +36,7 @@
       {
         name: "Work",
         color: "#addef8",
+        text_color: "white",
         img: "url/to/img",
         side: 'right',
         events: [{
@@ -58,6 +60,7 @@
         side: 'left',
         img: "url/to/img",
         color: "#6ce5c7",
+        text_color: "white",
         events: [{
           date: "2013-01-01", 
           content: "Lancement du Blog"
