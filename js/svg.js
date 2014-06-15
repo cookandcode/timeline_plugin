@@ -4,7 +4,7 @@ SVG = function(element){
 }
 
 SVG.createLine = function(params){
-  element = new SVG('line')
+  var element = new SVG('line')
   if (params.attributes){
     _.forEach(params.attributes, function(value, key){
       element.setAttribute(key, value)
@@ -14,8 +14,7 @@ SVG.createLine = function(params){
 }
 
 SVG.createRect = function(params){
-
-  element = new SVG('rect')
+  var element = new SVG('rect')
   if (params.attributes){
     _.forEach(params.attributes, function(value, key){
       element.setAttribute(key, value)
@@ -31,7 +30,7 @@ SVG.createSquare = function(params){
 
 
 SVG.createPath = function(params){
-  element = new SVG('path')
+  var element = new SVG('path')
   if (params.attributes){
     _.forEach(params.attributes, function(value, key){
       element.setAttribute(key, value)
@@ -42,7 +41,7 @@ SVG.createPath = function(params){
 }
 
 SVG.createText = function(params){
-  element = new SVG('text')
+  var element = new SVG('text')
   if (params.attributes){
     _.forEach(params.attributes, function(value, key){
       element.setAttribute(key, value)
@@ -55,7 +54,7 @@ SVG.createText = function(params){
 }
 
 SVG.createImage = function(params){
-  element = new SVG('image')
+  var element = new SVG('image')
   if (params.attributes){
     _.forEach(params.attributes, function(value, key){
       if (key == "xlink:href"){
@@ -66,12 +65,11 @@ SVG.createImage = function(params){
     })
   }
 
-  console.log(element)
   return element
 }
 
 SVG.createDefs = function(params){
-  element = new SVG('defs')
+  var element = new SVG('defs')
   if (params.attributes){
     _.forEach(params.attributes, function(value, key){
       element.setAttribute(key, value)
@@ -82,7 +80,7 @@ SVG.createDefs = function(params){
 }
 
 SVG.createPattern = function(params){
-  element = new SVG('pattern')
+  var element = new SVG('pattern')
   if (params.attributes){
     _.forEach(params.attributes, function(value, key){
       element.setAttribute(key, value)
@@ -93,7 +91,7 @@ SVG.createPattern = function(params){
 }
 
 SVG.createGradient = function(params){
-  element = new SVG('linearGradient')
+  var element = new SVG('linearGradient')
   if (params.attributes){
     _.forEach(params.attributes, function(value, key){
       element.setAttribute(key, value)
@@ -105,7 +103,7 @@ SVG.createGradient = function(params){
 
 
 SVG.createStop = function(params){
-  element = new SVG('stop')
+  var element = new SVG('stop')
   if (params.attributes){
     _.forEach(params.attributes, function(value, key){
       element.setAttribute(key, value)
