@@ -58,7 +58,7 @@
       },{
         name: "Le Male Saint",
         side: 'left',
-        img: "url/to/img",
+        img: "img/logo-lemalesaint.png",
         color: "#6ce5c7",
         text_color: "white",
         events: [{

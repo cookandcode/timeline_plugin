@@ -8,7 +8,7 @@ var Branch = (function(SVG){
     var _this = this
     this.month_gap = 0.000000012 //space between millisecond in px ~= 55px for a month
     this.squareWidth = 20
-    this.beginningSquareWidth = 70
+    this.beginningSquareWidth = 40
     this.curveSize = 5
     this.lineThickness = 4
     this.spaceBetweenBranch = 500
@@ -179,32 +179,42 @@ var Branch = (function(SVG){
 
   // build the beginning square 
   // Square with the img
-  Branch.prototype.buildBeginning = function(){
-    var imageBuilder = {
-      svgType: 'Image',
-      svgData: {
-        attributes: {
-          x: 0,
-          y: 0,
-          "xlink:href": this.img,
-          height: this.beginningSquareWidth,
-          width: this.beginningSquareWidth,
-          preserveAspectRatio: "none"
+  Branch.prototype.buildBeginning = function(image){
+    var builders = []
+    var nameBuilder = this.buildName()
+    builders.push(nameBuilder)
+
+    // For the moment, the image are blured
+    // Waiting for correction
+    if (image){
+      var imageBuilder = {
+        svgType: 'Image',
+        svgData: {
+          attributes: {
+            x: 0,
+            y: 0,
+            "xlink:href": this.img,
+            height: this.beginningSquareWidth,
+            width: this.beginningSquareWidth,
+            preserveAspectRatio: "xMinYMin slice"
+          }
         }
       }
-    }
-   
-    // Pattern which contain the image
-    var patternBuilder = {
-      svgType: 'Pattern',
-      svgData: {
-        attributes: {
-          id: this.getFirstDate(),  
-          width: 100,
-          height: 100
+     
+      // Pattern which contain the image
+      var patternBuilder = {
+        svgType: 'Pattern',
+        svgData: {
+          attributes: {
+            id: this.getFirstDate(),  
+            width: 100,
+            height: 100
+          },
         },
-      },
-      contain: imageBuilder
+        contain: imageBuilder
+      }
+
+      builders.push(patternBuilder)
     }
 
     var squareBuilder = {
@@ -215,14 +225,14 @@ var Branch = (function(SVG){
           x: this.getLeftBeginning.bind(this),
           y: this.beginning_position.top,
           width: this.beginningSquareWidth,
-          "fill": "url(#"+this.getFirstDate()+")",
+          "fill": (image) ? "url(#"+this.getFirstDate()+")" : this.color,
           stroke: this.color,
           "stroke-width": this.lineThickness
         }
       }
     }
-    var nameBuilder = this.buildName()
-    return [nameBuilder, patternBuilder, squareBuilder]
+    builders.push(squareBuilder)
+    return builders
   }
 
   Branch.prototype.clearSVG = function(){
