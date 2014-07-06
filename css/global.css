@@ -1,0 +1,16 @@
+body{
+  background: url('../img/background.jpg') 0 0  no-repeat ;
+  background-size: cover;
+}
+
+text{
+  font-family: "Helvetica";
+  font-weight: lighter;
+  letter-spacing: 3px;
+}
+
+div{
+  font-family: "Helvetica Neue";
+  font-size: 18px;
+  line-height: 24px;
+}
