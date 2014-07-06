@@ -7,7 +7,7 @@
 
 # TODO
 
-- When timeline is generating on small screen, we can't see all the branch
+- See how reload the timeline when the screen is too small (for the moment, the timeline is re-generated)
 - Refacto the code
 - Add show date on scroll
 - Add the possibility to personalize the timeline easily ! (Attribute in html for example)
@@ -17,3 +17,4 @@
 
 - Add begin/end possibility on the date (if no end, script suppose the event is during up to the next event)
 - Show the image (see pattern svg to set a background in rect element)
+- When timeline is generating on small screen, we can't see all the branch
