@@ -4,7 +4,7 @@ var Branch = (function(SVG){
   // position_top = position top of the first square OR branch object which correspond to the parent of this branch
   // position_left = position left of the first square
   // svg_div = DOM element which correspond to the svg element
-  Branch = function(params, position_top, position_left, svg_div){
+  Branch = function(params, position_top, svg_div){
     var _this = this
     this.month_gap = 0.000000012 //space between millisecond in px ~= 55px for a month
     this.squareWidth = 20
@@ -21,6 +21,8 @@ var Branch = (function(SVG){
       this.parent = position_top
       this.branchSide = params.side
     }
+
+    this.svg_div = svg_div || this.parent.svg_div
     this.name = params.name
     this.img = params.img
     this.events = params.events
@@ -43,6 +45,7 @@ var Branch = (function(SVG){
 
     
     if (this.isMaster){
+      var position_left = (this.svg_div.offsetWidth - this.squareWidth) / 2 
       this.beginning_position = {
         top: position_top,
         left: position_left
@@ -53,7 +56,6 @@ var Branch = (function(SVG){
       this.calculateBeginningPosition()
     }
 
-    this.svg_div = svg_div || this.parent.svg_div
 
     this.parseEvents()
 
@@ -242,7 +244,6 @@ var Branch = (function(SVG){
     if (this.children){
       _.forEach(this.children, function(children){
         children.clearSVG()
-        console.log(children) 
       })
     }
   }
@@ -311,7 +312,6 @@ var Branch = (function(SVG){
       this.parent.updateMaxWidth(rightX, rightWidth)
     else{
       var width = parseInt(rightX) + rightWidth
-      console.log(width)
       if (!this.maxWidth || parseInt(width) > parseInt(this.maxWidth)){ 
         this.maxWidth = width
       }

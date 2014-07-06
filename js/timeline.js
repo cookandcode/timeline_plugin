@@ -1,6 +1,6 @@
 // Timeline Class
 var Timeline = (function(Branch){
-  var Timeline = function(branch_params, top, left, svg_div){
+  var Timeline = function(branch_params, top, svg_div){
     var _this = this
     this.theMasterBranch = null
     this.svg_div = svg_div
@@ -8,8 +8,7 @@ var Timeline = (function(Branch){
     this.beginningDate = new Date(Date.parse(branch_params[0].events[0].date))
     _.forEach(branch_params, function(branch){
       _top = top
-      _left = left
-      _branch = new Branch(branch, _top, _left, svg_div, _this.beginningDate)
+      _branch = new Branch(branch, _top, svg_div)
       _this.branches.push(_branch)
       if (_branch.isMaster) _this.theMasterBranch = _branch
 

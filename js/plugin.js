@@ -72,13 +72,7 @@
   if (!div){
     alert('no div')
   }else{
-    svg_width = div.offsetWidth
-    square_width = 100
-    month_height = 200
-    center = (svg_width - square_width)/ 2 //100 == width of carre
-
-    MyTimeline = new Timeline(branches, 50, center, div)
-    //div.appendChild(SVG.createSquare({attributes : {x:center, y:50, width: square_width, fill: "transparent", stroke: "red"}}))
+    MyTimeline = new Timeline(branches, 50, div)
   }
 
   window.onscroll = function(e){
