@@ -1,26 +1,40 @@
 // SVG Class
-SVG = function(element){
-  return document.createElementNS("http://www.w3.org/2000/svg", element);
+SVG = function(element, params,  cb, branch){
+  var _this = this
+  this.element = document.createElementNS("http://www.w3.org/2000/svg", element);
+  if (params.attributes){
+    _.forEach(params.attributes, function(value, key){
+      if (typeof value == "function"){
+        var attrValue = value.call(_this.element)
+      }else{
+        var attrValue = value
+      }
+      if (cb){
+        cb(attrValue, key, _this.element)
+      }else{
+        _this.element.setAttribute(key, attrValue)
+      }
+    })
+  }
+
+  this.triggerAfterInsertCallback = function(){}
+  if (params.afterCreate){
+    this.triggerAfterInsertCallback = function(){
+      params.afterCreate.call(this.element)
+    }
+  }
+
+  return this
 }
 
 SVG.createLine = function(params){
-  var element = new SVG('line')
-  if (params.attributes){
-    _.forEach(params.attributes, function(value, key){
-      element.setAttribute(key, value)
-    })
-  }
-  return element
+  var newSVG = new SVG('line', params)
+  return newSVG
 }
 
 SVG.createRect = function(params){
-  var element = new SVG('rect')
-  if (params.attributes){
-    _.forEach(params.attributes, function(value, key){
-      element.setAttribute(key, value)
-    })
-  }
-  return element
+  var newSVG = new SVG('rect', params)
+  return newSVG
 }
 
 SVG.createSquare = function(params){
@@ -30,41 +44,28 @@ SVG.createSquare = function(params){
 
 
 SVG.createPath = function(params){
-  var element = new SVG('path')
-  if (params.attributes){
-    _.forEach(params.attributes, function(value, key){
-      element.setAttribute(key, value)
-    })
-  }
-
-  return element
+  var newSVG = new SVG('path', params)
+  return newSVG
 }
 
-SVG.createText = function(params){
-  var element = new SVG('text')
-  if (params.attributes){
-    _.forEach(params.attributes, function(value, key){
-      element.setAttribute(key, value)
-    })
-  }
+SVG.createText = function(params, branch){
+  var newSVG = new SVG('text', params)
+  newSVG.element.innerHTML = params.text
 
-  element.innerHTML = params.text
-
-  return element
+  return newSVG
 }
 
 SVG.createTextArea = function(params){
-  var element = new SVG('foreignObject')
-  if (params.attributes){
-    _.forEach(params.attributes, function(value, key){
-      element.setAttribute(key, value)
-    })
-  }
-
+  var newSVG = new SVG('foreignObject', params)
   var div = document.createElement("div");
   var style = [] 
   if (params.attributes && params.attributes.width){
-    style.push("width:"+(params.attributes.width - 50))
+    if (typeof params.attributes.width == "function"){
+      var divWidth = params.attributes.width()
+    }else{
+      var divWidth = params.attributes.width
+    }
+    style.push("width:"+(divWidth - 50))
   }
 
   if (params.attributes && params.attributes.stroke){
@@ -72,67 +73,40 @@ SVG.createTextArea = function(params){
   }
   div.setAttribute("style", style.join(";"))
   div.innerHTML = params.html
-  element.appendChild(div)
+  newSVG.element.appendChild(div)
 
-  return element
+  return newSVG
 }
 
 SVG.createImage = function(params){
-  var element = new SVG('image')
-  if (params.attributes){
-    _.forEach(params.attributes, function(value, key){
+  var newSVG = new SVG('image', params, function(value, key, element){
       if (key == "xlink:href"){
         element.setAttributeNS('http://www.w3.org/1999/xlink', 'href', value)
       }else{
         element.setAttribute(key, value)
       }
-    })
-  }
+  })
 
-  return element
+  return newSVG
 }
 
 SVG.createDefs = function(params){
-  var element = new SVG('defs')
-  if (params.attributes){
-    _.forEach(params.attributes, function(value, key){
-      element.setAttribute(key, value)
-    })
-  }
-
-  return element
+  var newSVG = new SVG('defs', params)
+  return newSVG
 }
 
 SVG.createPattern = function(params){
-  var element = new SVG('pattern')
-  if (params.attributes){
-    _.forEach(params.attributes, function(value, key){
-      element.setAttribute(key, value)
-    })
-  }
-
-  return element
+  var newSVG = new SVG('pattern', params)
+  return newSVG
 }
 
 SVG.createGradient = function(params){
-  var element = new SVG('linearGradient')
-  if (params.attributes){
-    _.forEach(params.attributes, function(value, key){
-      element.setAttribute(key, value)
-    })
-  }
-
-  return element
+  var newSVG = new SVG('linearGradient', params)
+  return newSVG
 }
 
 
 SVG.createStop = function(params){
-  var element = new SVG('stop')
-  if (params.attributes){
-    _.forEach(params.attributes, function(value, key){
-      element.setAttribute(key, value)
-    })
-  }
-
-  return element
+  var newSVG = new SVG('stop', params)
+  return newSVG
 }

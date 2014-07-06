@@ -15,21 +15,31 @@ var Timeline = (function(Branch){
 
     })
 
-    this.drawTimeline()
+    this.buildIt()
+    this.drawIt()
     this.svg_div.setAttribute('height', this.getHeight())
     this.svg_div.setAttribute('width', this.getWidth())
 
     return this
   }
 
-  Timeline.prototype.drawTimeline = function(){
-    // Bug with this in timeline
+  Timeline.prototype.buildIt = function(){
     var _this = this
     var _hereWeAre = 0
-    //cloneBranch = _.clone(this.branches)
-    // TO continue to create the Timeline 
     _.forEach(this.branches, function(branch, k){
-      branch.drawIt()
+      branch.buildIt()
+    })
+  }
+
+  Timeline.prototype.drawIt = function(){
+    _.forEach(this.branches, function(branch, k){
+      branch.drawEvents()
+      if (branch.minX < 0){
+        branch.beginning_position.left += -branch.minX + 10
+        branch.clearSVG()
+        branch.drawEvents()
+        
+      }
     })
   }
 
