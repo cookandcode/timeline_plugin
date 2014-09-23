@@ -5,9 +5,4 @@
   }else{
     MyTimeline = new Timeline(window.branches, 50, div)
   }
-
-  window.onscroll = function(e){
-  }
-     
-
 }) (SVG, Timeline);
