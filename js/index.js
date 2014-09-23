@@ -2,7 +2,8 @@ window.branches = [{
   name: "School",
   img: "url/to/img",
   color: "#fff1c2",
-  text_color: "white",
+  textColor: "white",
+  textBackground: "rgba(0, 0, 0, 0.5)",
   events: [{
     date: "2009-09-01", 
     content: "First year at Supinfo"

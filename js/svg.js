@@ -58,7 +58,7 @@ SVG.createText = function(params, branch){
 SVG.createTextArea = function(params){
   var newSVG = new SVG('foreignObject', params)
   var div = document.createElement("div");
-  var style = [] 
+  var style = ["position:relative"] 
   if (params.attributes && params.attributes.width){
     if (typeof params.attributes.width == "function"){
       var divWidth = params.attributes.width()
@@ -71,8 +71,20 @@ SVG.createTextArea = function(params){
   if (params.attributes && params.attributes.stroke){
     style.push("color:"+params.attributes.stroke)
   }
+
+  if (params.attributes && params.attributes.background){
+    style.push("background:"+ params.attributes.background)
+    style.push("padding: 10px 10px 10px 15px;")
+    style.push("border-radius: 5px;")
+    var arrow = document.createElement('div')
+    arrow.setAttribute("style", "position: absolute; top: 50%; margin-top: -10px; border-top: 10px solid transparent; border-bottom: 10px solid transparent; left: 0; margin-left: -10px; border-right: 10px solid " + params.attributes.background )
+  }
+
   div.setAttribute("style", style.join(";"))
   div.innerHTML = params.html
+  if (arrow != undefined){
+    div.appendChild(arrow)
+  }
   newSVG.element.appendChild(div)
 
   return newSVG

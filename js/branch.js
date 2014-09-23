@@ -13,7 +13,8 @@ var Branch = (function(SVG){
     this.lineThickness = 4
     this.spaceBetweenBranch = 500
     this.color = params.color || "black"
-    this.text_color = params.text_color || this.color
+    this.textColor = params.textColor || this.color
+    this.textBackground = params.textBackground || "rgba(0, 0, 0, 0)"
     this.heightFirstLine = 200
 
     // if this branch is a branch child of "position_top" parent
@@ -518,7 +519,7 @@ var Branch = (function(SVG){
             attributes : {
               width: this.squareWidth,
               fill: "transparent",
-              stroke: this.text_color
+              stroke: this.textColor
             },
             afterCreate: function(){
               var x = event.position.left() - this.offsetWidth - 20
@@ -540,7 +541,7 @@ var Branch = (function(SVG){
             attributes : {
               width: this.squareWidth,
               fill: "transparent",
-              stroke: this.text_color
+              stroke: this.textColor
             },
             afterCreate: function(){
               var x = event.position.left() - this.offsetWidth - 10
@@ -557,7 +558,7 @@ var Branch = (function(SVG){
             attributes : {
               width: this.squareWidth,
               fill: "transparent",
-              stroke: this.text_color
+              stroke: this.textColor
             },
             afterCreate: function(){
               var x = event.position.left() - this.offsetWidth - 10
@@ -591,8 +592,9 @@ var Branch = (function(SVG){
             x: xContentText.bind(this),
             width: widthContent.bind(this),
             fill: "transparent",
-            stroke: this.text_color,
-            height: 100
+            stroke: this.textColor,
+            height: 100,
+            background: this.textBackground
           },
           afterCreate: function(){
             var heightContent = this.children[0].offsetHeight 
