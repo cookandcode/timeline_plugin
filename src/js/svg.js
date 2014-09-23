@@ -65,7 +65,7 @@ SVG.createTextArea = function(params){
     }else{
       var divWidth = params.attributes.width
     }
-    style.push("width:"+(divWidth - 50))
+    style.push("width:" + (divWidth - 30) + "px")
   }
 
   if (params.attributes && params.attributes.stroke){
