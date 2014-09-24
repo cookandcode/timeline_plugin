@@ -7,7 +7,7 @@ module.exports = function(grunt) {
     uglify: {
       my_target: {
         files: {
-          'dist/js/timeline.min.js': ['src/js/svg.js', 'src/js/branch.js', 'src/js/timeline.js', 'src/js/plugin.js']
+          'dist/js/timeline.min.js': ['src/js/svg.js', 'src/js/branch.js', 'src/js/timeline.js']
         }
       }
     },
