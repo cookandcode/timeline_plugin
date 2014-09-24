@@ -13,10 +13,17 @@ Include the timeline script + the timeline css
 
 # How it work
 
+Add the "create-timeline" attribute on the 'svg' element where the timeline will be build
+
+```html
+    <svg create-timeline width="100%" height="100%">
+    </svg>
+```
+
 Define the timeline branches:
 
 ```js
-  window.branches = [{
+  new Timeline([{
     name: "Branch name",
     color: "#FFF", //branch color
     textColor: "#FFF", //color for date text + event content text
@@ -28,15 +35,13 @@ Define the timeline branches:
       date: "2015-09-01", 
       content: "Event content 2"
     }]
-  }]
+  }])
 ```
-
-## ( BE CAREFUL, for now, the timeline is generated with the window.branches var )
 
 Branch can have children branch :
 
 ```js
-  window.branches = [{
+  new Timeline( [{
     name: "Branch name",
     color: "#FFF", //branch color
     textColor: "#FFF", //color for the date  + the event content 
@@ -61,7 +66,7 @@ Branch can have children branch :
             end: "2014-09-01"
           },
           content: "Event content 3" 
-    }]
+    }] )
 ```
 
 # OPTIONS
