@@ -26,7 +26,7 @@ Define the timeline branches:
   new Timeline([{
     name: "Branch name",
     color: "#FFF", //branch color
-    textColor: "#FFF", //color for date text + event content text
+    textColor: "#FFF", //color for the date + the event content
     textBackground: "rgba(0, 0, 0, .3)", // event content background
     events: [{
       date: "2014-09-01", 
