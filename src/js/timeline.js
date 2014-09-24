@@ -1,7 +1,13 @@
 // Timeline Class
 var Timeline = (function(Branch){
-  var Timeline = function(branch_params, top, svg_div){
+  var Timeline = function(branch_params){
     var _this = this
+    var top = 50
+    var svg_div = document.querySelectorAll("[create-timeline]")[0]
+    if (!svg_div){
+      alert('no div with "create-timeline" attribute')
+      return
+    }
     this.theMasterBranch = null
     this.svg_div = svg_div
     this.branches = []
