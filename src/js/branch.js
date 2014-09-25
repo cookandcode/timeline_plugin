@@ -597,7 +597,7 @@ var Branch = (function(SVG){
             background: this.textBackground
           },
           afterCreate: function(){
-            var heightContent = this.children[0].offsetHeight 
+            var heightContent = this.childNodes[0].offsetHeight 
             var y =  event.position.top() + _this.squareWidth / 2 - heightContent / 2
             this.setAttribute("y", y)
             _this.updateTotalHeight(y + heightContent)
