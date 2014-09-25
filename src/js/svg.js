@@ -50,7 +50,9 @@ SVG.createPath = function(params){
 
 SVG.createText = function(params, branch){
   var newSVG = new SVG('text', params)
-  newSVG.element.innerHTML = params.text
+  var tspan = new SVG("tspan", {});
+  tspan.element.textContent = params.text;
+  newSVG.element.appendChild(tspan.element) 
 
   return newSVG
 }
