@@ -1,4 +1,4 @@
-window.branches = [{
+new Timeline( [{
   name: "School",
   img: "url/to/img",
   color: "#fff1c2",
@@ -45,4 +45,4 @@ window.branches = [{
         content: "Blog Launching"
       }]
     }]
-}]
+}])
